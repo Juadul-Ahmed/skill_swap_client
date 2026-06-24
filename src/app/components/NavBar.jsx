@@ -7,7 +7,7 @@ import { Button } from "@heroui/react";
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Base Public Links visible to everyone
+
   const publicLinks = [
     { label: "Home", href: "/" },
     { label: "Browse Tasks", href: "/tasks" },
@@ -18,7 +18,6 @@ export default function Navbar() {
     <nav className="sticky top-0 z-50 w-full border-b border-white/5 bg-[#0B0B0F]/80 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between relative">
         
-        {/* BRAND LOGO (Left Aligned) */}
         <Link href="/" className="flex items-center gap-3 group transition-opacity hover:opacity-90 z-10">
           <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-emerald-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-emerald-500/20">
             <span className="text-xl font-black text-black tracking-tighter">S</span>
@@ -28,7 +27,6 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* CENTERED NAVIGATION LINKS (Clean with bottom underline hover effect) */}
         <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto">
           <ul className="flex items-center gap-8">
             {publicLinks.map((link) => (
@@ -46,7 +44,7 @@ export default function Navbar() {
           </ul>
         </div>
 
-        {/* AUTH BUTTONS / MOBILE TOGGLE (Right Aligned) */}
+       
         <div className="flex items-center gap-4 z-10">
           <div className="hidden md:flex items-center gap-6">
             <Link
@@ -66,7 +64,7 @@ export default function Navbar() {
             </Button>
           </div>
 
-          {/* MOBILE MENU TOGGLE BUTTON */}
+      
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="p-2 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-colors md:hidden"
@@ -85,7 +83,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* MOBILE DROP-DOWN MENU */}
+   
       {isMenuOpen && (
         <div className="absolute top-full left-0 w-full border-b border-white/5 bg-[#0B0B0F]/95 backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-200 md:hidden">
           <div className="px-6 py-6 space-y-5">

@@ -2,11 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Button } from "@heroui/react";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
 
   const publicLinks = [
     { label: "Home", href: "/" },
@@ -17,16 +15,24 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-white/5 bg-[#0B0B0F]/80 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between relative">
-        
-        <Link href="/" className="flex items-center gap-3 group transition-opacity hover:opacity-90 z-10">
+        <Link
+          href="/"
+          className="flex items-center gap-3 group transition-opacity hover:opacity-90 z-10"
+        >
           <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-emerald-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-            <span className="text-xl font-black text-black tracking-tighter">S</span>
+            <span className="text-xl font-black text-black tracking-tighter">
+              S
+            </span>
           </div>
           <span className="text-lg font-bold tracking-tight text-white hidden sm:block">
-            Skill<span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Swap</span>
+            Skill
+            <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+              Swap
+            </span>
           </span>
         </Link>
 
+        {/* Center Links - Desktop */}
         <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto">
           <ul className="flex items-center gap-8">
             {publicLinks.map((link) => (
@@ -44,7 +50,7 @@ export default function Navbar() {
           </ul>
         </div>
 
-       
+        {/* Right Actions - Desktop */}
         <div className="flex items-center gap-4 z-10">
           <div className="hidden md:flex items-center gap-6">
             <Link
@@ -54,36 +60,56 @@ export default function Navbar() {
               Sign In
             </Link>
 
-            <Button
-              as={Link}
-              href="/register"
-              radius="lg"
-              className="h-11 bg-white px-6 text-sm font-semibold text-black hover:bg-gray-200 transition-all shadow-md shadow-white/5"
+            <Link
+              href="/auth/signup"
+              className="inline-flex items-center justify-center bg-white font-semibold text-black hover:bg-gray-200 rounded-xl px-4 h-10 text-sm transition-colors duration-200"
             >
               Get Started
-            </Button>
+            </Link>
           </div>
 
-      
+          {/* Hamburger Menu - Mobile Toggle */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="p-2 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-colors md:hidden"
             aria-label="Toggle Menu"
           >
             {isMenuOpen ? (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               </svg>
             )}
           </button>
         </div>
       </div>
 
-   
+      {/* Drawer Overlay - Mobile Menu */}
       {isMenuOpen && (
         <div className="absolute top-full left-0 w-full border-b border-white/5 bg-[#0B0B0F]/95 backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-200 md:hidden">
           <div className="px-6 py-6 space-y-5">
@@ -111,16 +137,14 @@ export default function Navbar() {
               >
                 Sign In
               </Link>
-
-              <Button
-                as={Link}
-                href="/register"
-                radius="lg"
-                className="w-full bg-white font-semibold text-black hover:bg-gray-200"
+              
+              <Link
+                href="/auth/signup"
+                className="flex items-center justify-center w-full bg-white font-semibold text-black hover:bg-gray-200 py-3 rounded-xl text-base text-center transition-colors duration-200"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Get Started
-              </Button>
+              </Link>
             </div>
           </div>
         </div>

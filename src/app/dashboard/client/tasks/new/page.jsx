@@ -13,12 +13,15 @@ import {
     ListBox,
     Button
 } from "@heroui/react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
+import { createTask } from "@/lib/actions/task";
+import toast from "react-hot-toast";
 
 export default function PostTaskPage() {
     const router = useRouter();
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -54,11 +57,12 @@ export default function PostTaskPage() {
             createdAt: new Date().toISOString()
         };
 
-        // Mimic network request latency delay 
-        await new Promise((resolve) => setTimeout(resolve, 1400));
-        console.log("Database Payload Saved:", payload);
-        setIsSubmitting(false);
-        router.push("/dashboard/client");
+        const res = await createTask(payload)
+        if(res.insertedId){
+            toast.success("Task added successfully")
+            e.target.reset()
+            router.push('/dashboard/client/tasks')
+        }
     };
 
     // Premium styling variants matching dark cyberpunk dashboard design textures

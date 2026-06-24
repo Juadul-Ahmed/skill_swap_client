@@ -1,34 +1,41 @@
 import {
   Bell,
+  Briefcase,
   Envelope,
   Gear,
   House,
   LayoutSideContentLeft,
-  Magnifier,
+
+  Pencil,
+
+  PencilToSquare,
+
   Person,
 } from "@gravity-ui/icons";
 
 import { Button, Drawer } from "@heroui/react";
+import Link from "next/link";
 
 export function DashboardSideBar() {
   const navItems = [
-    { icon: House, label: "Home" },
+    { icon: House, label: "Home", href: "/dashboard/client" },
 
-    { icon: Magnifier, label: "Search" },
+    { icon: Briefcase, label: "Tasks", href: "/dashboard/client/tasks" },
 
-    { icon: Bell, label: "Notifications" },
+    { icon: PencilToSquare , label: "Create a Task", href: "/dashboard/client/tasks/new" },
 
-    { icon: Envelope, label: "Messages" },
+    { icon: Envelope, label: "Messages", href: "#" },
 
-    { icon: Person, label: "Profile" },
+    { icon: Person, label: "My Profile", href: "/dashboard/client/profile" },
 
-    { icon: Gear, label: "Settings" },
+    { icon: Gear, label: "Settings", href: "#" },
   ];
 
   const navContent = (
     <nav className="flex flex-col gap-1">
       {navItems.map((item) => (
-        <button
+        <Link
+        href={item.href}
           key={item.label}
           className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-foreground transition-colors hover:bg-default"
           type="button"
@@ -36,7 +43,7 @@ export function DashboardSideBar() {
           <item.icon className="size-5 text-muted" />
 
           {item.label}
-        </button>
+        </Link>
       ))}
     </nav>
   );

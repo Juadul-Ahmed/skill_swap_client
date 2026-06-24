@@ -2,9 +2,19 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { authClient, useSession } from "@/lib/auth-client";
+import { redirect } from "next/navigation";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { data: session, isPending } = useSession();
+
+  const user = session?.user;
+  console.log(user);
+
+  const handleSignOut = async () => {
+    await authClient.signOut();
+  };
 
   const publicLinks = [
     { label: "Home", href: "/" },
@@ -53,12 +63,35 @@ export default function Navbar() {
         {/* Right Actions - Desktop */}
         <div className="flex items-center gap-4 z-10">
           <div className="hidden md:flex items-center gap-6">
-            <Link
-              href="/auth/signin"
-              className="text-sm font-medium text-emerald-400 transition-colors hover:text-emerald-300"
-            >
-              Sign In
-            </Link>
+            {user ? (
+              <>
+                <div className="flex flex-col text-left">
+                  <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider leading-none mb-0.5">
+                    Welcome back
+                  </span>
+                  <span className="text-sm font-bold text-zinc-200 leading-tight truncate max-w-[120px]">
+                    {user.name}
+                  </span>
+                </div>
+                <div className="h-4 w-px bg-white/10 mx-1" />
+                {
+                  <Link
+                    onClick={handleSignOut}
+                    href="/auth/signin"
+                    className="text-xs font-semibold text-zinc-400 hover:text-red-400 transition-colors duration-200 px-2 py-1 rounded-lg hover:bg-red-500/10"
+                  >
+                    Sign Out
+                  </Link>
+                }
+              </>
+            ) : (
+              <Link
+                href="/auth/signin"
+                className="text-sm font-medium text-emerald-400 transition-colors hover:text-emerald-300"
+              >
+                Sign In
+              </Link>
+            )}
 
             <Link
               href="/auth/signup"
@@ -130,14 +163,27 @@ export default function Navbar() {
             <div className="w-full h-px bg-white/10" />
 
             <div className="flex flex-col gap-3 pt-1">
-              <Link
-                href="/auth/signin"
-                className="text-center rounded-xl px-4 py-3 text-base font-medium text-emerald-400 hover:bg-white/5 transition-all"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Sign In
-              </Link>
-              
+              {user ? (
+                <>
+                  {
+                    <Link
+                      onClick={handleSignOut}
+                      href="/auth/signin"
+                      className="text-sm font-medium text-red-400 transition-colors hover:text-red-600"
+                    >
+                      Sign Out
+                    </Link>
+                  }
+                </>
+              ) : (
+                <Link
+                  href="/auth/signin"
+                  className="text-sm font-medium text-emerald-400 transition-colors hover:text-emerald-300"
+                >
+                  Sign In
+                </Link>
+              )}
+
               <Link
                 href="/auth/signup"
                 className="flex items-center justify-center w-full bg-white font-semibold text-black hover:bg-gray-200 py-3 rounded-xl text-base text-center transition-colors duration-200"

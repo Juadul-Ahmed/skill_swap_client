@@ -57,7 +57,7 @@ export default function PostTaskForm({client}) {
             deadline: data.deadline,
             status: "open", 
             createdAt: new Date().toISOString(),
-            clientId: client.ClientId,
+            clientId: client.clientId,
 
         };
 

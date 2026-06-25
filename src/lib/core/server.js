@@ -13,7 +13,9 @@ export const serverMutation= async(path,data) =>{
 
 export const serverFetch = async(path)=>{
   const res = await fetch (`${baseUrl}${path}`);
-  return res.json()
+  const text = await res.text(); 
+    if (!text) return null; 
+  return JSON.parse(text); 
 }
 
 export const updateClientProfile = async (clientId, data) => {

@@ -11,3 +11,6 @@ import { getUserSession } from "../core/session"
    const user = await getUserSession()
    return getClientProfile(user?.id)
  }
+
+
+ 

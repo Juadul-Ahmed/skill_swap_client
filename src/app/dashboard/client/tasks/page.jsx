@@ -6,6 +6,8 @@ import { getLoggedInClientProfile } from "@/lib/api/clients";
 
 const ClientTasks = async () => {
   const task = await getLoggedInClientProfile()
+   console.log("Client Profile:", task);           // ← check this
+    console.log("ClientId being used:", task?.clientId);
   const tasks = await getClientTasks(task.clientId);
   console.log(tasks);
 

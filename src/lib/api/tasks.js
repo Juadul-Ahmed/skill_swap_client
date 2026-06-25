@@ -4,3 +4,9 @@
     return res.json()
 
  }
+
+
+ export const getPublicTasks = async (category = "") => {
+    const res = await fetch(`${baseUrl}/api/tasks/public?category=${category}`);
+    return res.json()
+}

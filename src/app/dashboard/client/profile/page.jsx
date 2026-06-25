@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { use } from 'react';
+import ClientProfileForm from './ClientProfile';
+import { getUserSession } from '@/lib/core/session';
+import { getClientProfile } from '@/lib/api/clients';
 
-const CLientProfile = () => {
+const CLientProfilePage = async () => {
+const user = await getUserSession();
+
+const clientProfile = await getClientProfile(user?.id)
+
   return (
     <div>
-      <h1>Client Profile</h1>
+      <ClientProfileForm client={user} clientProfile={clientProfile}/>
     </div>
   );
 };
 
-export default CLientProfile;
+export default CLientProfilePage;

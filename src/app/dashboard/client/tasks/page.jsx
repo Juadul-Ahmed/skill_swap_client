@@ -2,10 +2,11 @@ import { getClientTasks } from "@/lib/api/tasks";
 import React from "react";
 import { Table, Chip, Button, Tooltip } from "@heroui/react";
 import { Pencil, TrashBin } from "@gravity-ui/icons";
+import { getLoggedInClientProfile } from "@/lib/api/clients";
 
 const ClientTasks = async () => {
-  const taskId = "tasks_123";
-  const tasks = await getClientTasks(taskId);
+  const task = await getLoggedInClientProfile()
+  const tasks = await getClientTasks(task.clientId);
   console.log(tasks);
 
   // Helper to determine status chip coloring based on your payload values

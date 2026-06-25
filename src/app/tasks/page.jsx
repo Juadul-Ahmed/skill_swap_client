@@ -1,5 +1,6 @@
 import { getPublicTasks } from "@/lib/api/tasks";
 import Link from "next/link";
+import TaskFilters from "../components/DashboardComponents/TaskFilters";
 
 const categoryColors = {
     "web-development": { bg: "bg-blue-500/10", border: "border-blue-500/20", text: "text-blue-400" },
@@ -23,8 +24,13 @@ const formatDeadline = (date) => {
     });
 };
 
-const BrowseTasksPage = async () => {
-    const tasks = await getPublicTasks();
+const BrowseTasksPage = async ({searchParams}) => {
+
+     const { category = "", search = "" } = await searchParams;
+
+  const tasks = await getPublicTasks(category, search);
+
+
 
     return (
         <div className="min-h-screen bg-[#070709] text-white">
@@ -49,7 +55,7 @@ const BrowseTasksPage = async () => {
                     </p>
                 </div>
 
-              
+              <TaskFilters/>
                 {tasks.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-32 text-center">
                         <div className="w-16 h-16 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center mb-6">

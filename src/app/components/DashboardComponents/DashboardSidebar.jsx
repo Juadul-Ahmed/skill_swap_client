@@ -36,7 +36,7 @@ export async function DashboardSideBar  () {
 
     { icon: PencilToSquare , label: "Create a Task", href: "/dashboard/client/tasks/new" },
 
-    { icon: Envelope, label: "Messages", href: "#" },
+    { icon: Envelope, label: "Proposals", href: "/dashboard/client/proposals" },
 
     { icon: Person, label: "My Profile", href: "/dashboard/client/profile" },
 

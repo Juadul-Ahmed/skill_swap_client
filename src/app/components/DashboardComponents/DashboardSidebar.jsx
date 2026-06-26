@@ -1,12 +1,18 @@
+
+import { useSession } from "@/lib/auth-client";
+import { getUserSession } from "@/lib/core/session";
 import {
-  Bell,
+  
   Briefcase,
+  CircleDollar,
+  Compass,
   Envelope,
-  Gear,
+  FileText,
   House,
+  Layers,
   LayoutSideContentLeft,
 
-  Pencil,
+  
 
   PencilToSquare,
 
@@ -16,8 +22,14 @@ import {
 import { Button, Drawer } from "@heroui/react";
 import Link from "next/link";
 
-export function DashboardSideBar() {
-  const navItems = [
+export async function DashboardSideBar  () {
+
+  const user  = await getUserSession()
+
+ 
+
+
+  const clientNavLinks =  [
     { icon: House, label: "Home", href: "/dashboard/client" },
 
     { icon: Briefcase, label: "Tasks", href: "/dashboard/client/tasks" },
@@ -28,8 +40,30 @@ export function DashboardSideBar() {
 
     { icon: Person, label: "My Profile", href: "/dashboard/client/profile" },
 
-    { icon: Gear, label: "Settings", href: "#" },
   ];
+
+  const freelancerNavLink = [
+    { icon: House, label: "Home", href: "/dashboard/freelancer" },
+
+    { icon: Compass, label: "Browse Tasks", href: "/browse-tasks" },
+
+    { icon: FileText, label: "My Proposals", href: "/dashboard/freelancer/proposals" },
+
+    { icon: Layers, label: "Active Projects", href: "/dashboard/freelancer/projects" },
+
+    { icon: CircleDollar, label: "My Earnings", href: "/dashboard/freelancer/earnings" },
+
+    { icon: Envelope, label: "Messages", href: "#" },
+
+    { icon: Person, label: "My Profile", href: "/dashboard/freelancer/profile" },
+
+]
+
+  const navLinksMap = {
+    freelancer : freelancerNavLink,
+    client : clientNavLinks,
+  }
+  const navItems = navLinksMap[user?.role || 'freelancer']
 
   const navContent = (
     <nav className="flex flex-col gap-1">

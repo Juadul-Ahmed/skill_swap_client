@@ -3,6 +3,8 @@ import React from "react";
 import { Table, Chip, Button, Tooltip } from "@heroui/react";
 import { Pencil, TrashBin } from "@gravity-ui/icons";
 import { getLoggedInClientProfile } from "@/lib/api/clients";
+import { EditTaskModal } from "@/app/components/DashboardComponents/EditTaskModal";
+import { DeleteTaskDialog } from "@/app/components/DashboardComponents/DeleteTaskDialog";
 
 const ClientTasks = async () => {
   const task = await getLoggedInClientProfile()
@@ -166,31 +168,13 @@ const ClientTasks = async () => {
                       <div className="relative flex items-center gap-2">
                         
                         <Tooltip content="Edit Job">
-                          <Button
-                            isIconOnly
-                            size="sm"
-                            variant="light"
-                            aria-label="Edit job"
-                            // ✅ Added: bg color shifts, border changes, and group target setup
-                            className="group bg-transparent border border-transparent hover:bg-emerald-500/10 hover:border-emerald-500/20 rounded-xl transition-all duration-200 cursor-pointer"
-                          >
                           
-                            <Pencil className="text-zinc-400 w-4 h-4 group-hover:text-emerald-400 transition-colors duration-200" />
-                          </Button>
+                          <EditTaskModal task={task} />
                         </Tooltip>
 
                         <Tooltip content="Delete Job">
-                          <Button
-                            isIconOnly
-                            size="sm"
-                            variant="light"
-                            aria-label="Delete job"
-                         
-                            className="group bg-transparent border border-transparent hover:bg-red-500/10 hover:border-red-500/20 rounded-xl transition-all duration-200 cursor-pointer"
-                          >
-                        
-                            <TrashBin className="text-zinc-500 w-4 h-4 group-hover:text-red-400 transition-colors duration-200" />
-                          </Button>
+                          
+                          <DeleteTaskDialog task={task} />
                         </Tooltip>
                       </div>
                     </Table.Cell>

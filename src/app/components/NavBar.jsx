@@ -22,6 +22,20 @@ export default function Navbar() {
     { label: "Browse Freelancers", href: "/freelancers" },
   ];
 
+  const dashBoardLinks ={
+    freelancer: '/dashboard/freelancer',
+    client: '/dashboard/client'
+  }
+
+  if(user?.email){
+    publicLinks.push(
+      {
+        label: "Dashboard",
+        href: dashBoardLinks[user?.role || 'freelancer']
+      }
+    )
+  }
+
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-white/5 bg-[#0B0B0F]/80 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between relative">

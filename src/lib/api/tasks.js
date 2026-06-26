@@ -1,3 +1,5 @@
+import { serverFetch } from "../core/server";
+
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 export const getClientTasks = async (clientId, status = "open") => {
   const res = await fetch(
@@ -21,3 +23,8 @@ export const getPublicTasks = async (
 
   return res.json();
 };
+
+
+export const getTaskById = async(taskId)=>{
+   return serverFetch(`/api/tasks/${taskId}`)
+}

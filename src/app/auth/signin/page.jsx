@@ -5,6 +5,7 @@ import { Card, Button, Link, TextField, Label, InputGroup, Input, RadioGroup, Ra
 
 import { At, Eye, EyeSlash, Person, Persons, Picture, ShieldKeyhole } from "@gravity-ui/icons";
 import { authClient } from "@/lib/auth-client";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function SignupPage() {
     // Form fields
@@ -22,6 +23,11 @@ export default function SignupPage() {
 
     const toggleVisibility = () => setIsVisible(!isVisible);
 
+    const searchParams = useSearchParams();
+    const redirectTo = searchParams.get("redirect") || "/";
+
+    const router = useRouter()
+
     const handleSignup = async (e) => {
         e.preventDefault();
         setError("");
@@ -32,7 +38,7 @@ export default function SignupPage() {
             const { data, error: authError } = await authClient.signIn.email({
                 email,
                 password,
-                callbackURL: "/",
+                
                 
             });
 
@@ -45,6 +51,7 @@ export default function SignupPage() {
                 setImage("");
                 setPassword("");
                 setRole("client");
+                router.push(redirectTo)
             }
         } catch (err) {
             setError("An unexpected network error occurred.");

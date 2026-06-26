@@ -2,6 +2,7 @@
 
 import { Magnifier } from "@gravity-ui/icons";
 import { useRouter, useSearchParams } from "next/navigation";
+import { startTransition } from "react";
 
 
 const categories = [
@@ -19,14 +20,16 @@ export default function TaskFilters() {
   const selectedCategory = searchParams.get("category") || "";
   const search = searchParams.get("search") || "";
 
-  const updateFilters = (category, searchTerm) => {
-    const params = new URLSearchParams();
+  const updateFilters = (category, searchTerm = "") => {
+  const params = new URLSearchParams();
 
-    if (category) params.set("category", category);
-    if (searchTerm) params.set("search", searchTerm);
+  if (category) params.set("category", category);
+  if (searchTerm) params.set("search", searchTerm);
 
+  startTransition(() => {
     router.push(`/tasks?${params.toString()}`);
-  };
+  });
+};
 
   return (
     <div className="bg-zinc-900/50 p-6 rounded-3xl border border-zinc-800 mb-8">

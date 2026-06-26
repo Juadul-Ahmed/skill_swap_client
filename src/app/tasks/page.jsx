@@ -115,7 +115,7 @@ const BrowseTasksPage = async ({searchParams}) => {
 
                               
                                     <Link
-                                        href={`/browse-tasks/${task._id}`}
+                                        href={`/tasks/${task._id}`}
                                         className="w-full mt-auto bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-500 text-black font-black text-xs uppercase tracking-wider rounded-xl py-3 text-center hover:brightness-110 transition-all duration-200 shadow-[0_4px_20px_rgba(52,211,153,0.1)]"
                                     >
                                         View & Apply

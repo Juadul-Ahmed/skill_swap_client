@@ -27,4 +27,4 @@ export const updateClientProfile = async (clientId, data) => {
     return res.json();
 }
 
-
+export const freelancers = await serverFetch("/api/freelancers") || [];

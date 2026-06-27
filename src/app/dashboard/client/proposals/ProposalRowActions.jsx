@@ -3,10 +3,11 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AlertDialog, Button } from "@heroui/react";
-import { acceptProposal, rejectProposal } from "@/lib/actions/proposals";
+import { rejectProposal } from "@/lib/actions/proposals";
 import toast from "react-hot-toast";
 
-export default function ProposalRowActions({ proposalId, taskAccepted }) {
+export default function ProposalRowActions({ proposalId, taskAccepted, taskId, taskTitle, budget }) {
+    console.log("Props check:", { taskId, proposalId, taskTitle, budget });
     const router = useRouter();
     const [isAccepting, setIsAccepting] = useState(false);
     const [isRejecting, setIsRejecting] = useState(false);
@@ -14,15 +15,15 @@ export default function ProposalRowActions({ proposalId, taskAccepted }) {
     const handleAccept = async () => {
         setIsAccepting(true);
         try {
-            const res = await acceptProposal(proposalId);
-            if (res?.success) {
-                toast.success("Proposal accepted! Task is now in progress.");
-                router.refresh();
-            } else {
-                toast.error(res?.error || "Failed to accept proposal");
-            }
+            const res = await fetch('/api/checkout_sessions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ taskId, proposalId, taskTitle, budget })
+            });
+            const { url } = await res.json();
+            window.location.href = url;
         } catch (err) {
-            toast.error("Something went wrong");
+            toast.error("Failed to initiate payment");
         } finally {
             setIsAccepting(false);
         }
@@ -48,7 +49,6 @@ export default function ProposalRowActions({ proposalId, taskAccepted }) {
     return (
         <div className="flex items-center gap-2">
 
-            {/* Accept Button — disabled if task already has an accepted proposal */}
             {!taskAccepted && (
                 <AlertDialog>
                     <Button
@@ -89,7 +89,6 @@ export default function ProposalRowActions({ proposalId, taskAccepted }) {
                 </AlertDialog>
             )}
 
-            {/* Reject Button */}
             <AlertDialog>
                 <Button
                     variant="secondary"

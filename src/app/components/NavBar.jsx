@@ -24,7 +24,8 @@ export default function Navbar() {
 
   const dashBoardLinks ={
     freelancer: '/dashboard/freelancer',
-    client: '/dashboard/client'
+    client: '/dashboard/client',
+    admin: '/dashboard/admin'
   }
 
   if(user?.email){

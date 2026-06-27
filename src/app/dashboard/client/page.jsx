@@ -1,11 +1,12 @@
 import DashboardStats from '@/app/components/DashboardComponents/DashboardStats';
-import { getUserSession } from '@/lib/core/session';
+import { getUserSession, requireRole } from '@/lib/core/session';
 import { getLoggedInClientProfile } from '@/lib/api/clients';
 
 
 import { getClientStats } from '@/lib/api/stats';
 
 const ClientHomepage = async () => {
+    await requireRole("client")
     const user = await getUserSession();
     const clientProfile = await getLoggedInClientProfile();
     const stats = await getClientStats(clientProfile?.clientId);

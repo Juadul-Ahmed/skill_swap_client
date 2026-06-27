@@ -26,3 +26,5 @@ export const updateClientProfile = async (clientId, data) => {
     });
     return res.json();
 }
+
+

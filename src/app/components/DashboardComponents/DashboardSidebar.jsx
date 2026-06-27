@@ -1,75 +1,92 @@
-
 import { useSession } from "@/lib/auth-client";
 import { getUserSession } from "@/lib/core/session";
 import {
-  
   Briefcase,
+  ChartBar,
   CircleDollar,
   Compass,
+  CreditCard,
   Envelope,
   FileText,
   House,
   Layers,
   LayoutSideContentLeft,
-
-  
-
+  ListCheck,
   PencilToSquare,
-
   Person,
 } from "@gravity-ui/icons";
 
 import { Button, Drawer } from "@heroui/react";
 import Link from "next/link";
 
-export async function DashboardSideBar  () {
+export async function DashboardSideBar() {
+  const user = await getUserSession();
 
-  const user  = await getUserSession()
-
- 
-
-
-  const clientNavLinks =  [
+  const clientNavLinks = [
     { icon: House, label: "Home", href: "/dashboard/client" },
 
     { icon: Briefcase, label: "Tasks", href: "/dashboard/client/tasks" },
 
-    { icon: PencilToSquare , label: "Create a Task", href: "/dashboard/client/tasks/new" },
+    {
+      icon: PencilToSquare,
+      label: "Create a Task",
+      href: "/dashboard/client/tasks/new",
+    },
 
     { icon: Envelope, label: "Proposals", href: "/dashboard/client/proposals" },
 
     { icon: Person, label: "My Profile", href: "/dashboard/client/profile" },
-
   ];
 
   const freelancerNavLink = [
     { icon: House, label: "Home", href: "/dashboard/freelancer" },
 
-    { icon: Compass, label: "Browse Tasks", href: "/browse-tasks" },
+    { icon: Compass, label: "Browse Tasks", href: "/tasks" },
 
-    { icon: FileText, label: "My Proposals", href: "/dashboard/freelancer/proposals" },
+    {
+      icon: FileText,
+      label: "My Proposals",
+      href: "/dashboard/freelancer/proposals",
+    },
 
-    { icon: Layers, label: "Active Projects", href: "/dashboard/freelancer/projects" },
+    {
+      icon: Layers,
+      label: "Active Projects",
+      href: "/dashboard/freelancer/projects",
+    },
 
-    { icon: CircleDollar, label: "My Earnings", href: "/dashboard/freelancer/earnings" },
+    {
+      icon: CircleDollar,
+      label: "My Earnings",
+      href: "/dashboard/freelancer/earnings",
+    },
 
-    { icon: Envelope, label: "Messages", href: "#" },
+    {
+      icon: Person,
+      label: "My Profile",
+      href: "/dashboard/freelancer/profile",
+    },
+  ];
 
-    { icon: Person, label: "My Profile", href: "/dashboard/freelancer/profile" },
-
-]
+  const adminNavLinks = [
+    { icon: ChartBar, label: "Overview", href: "/dashboard/admin" },
+    { icon: Person, label: "Manage Users", href: "/dashboard/admin/users" },
+    { icon: ListCheck, label: "Manage Tasks", href: "/dashboard/admin/tasks" },
+    { icon: CreditCard, label: "Transactions", href: "/dashboard/admin/transactions" },
+];
 
   const navLinksMap = {
-    freelancer : freelancerNavLink,
-    client : clientNavLinks,
-  }
-  const navItems = navLinksMap[user?.role || 'freelancer']
+    freelancer: freelancerNavLink,
+    client: clientNavLinks,
+    admin: adminNavLinks,
+  };
+  const navItems = navLinksMap[user?.role || "freelancer"];
 
   const navContent = (
     <nav className="flex flex-col gap-1">
       {navItems.map((item) => (
         <Link
-        href={item.href}
+          href={item.href}
           key={item.label}
           className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-foreground transition-colors hover:bg-default"
           type="button"

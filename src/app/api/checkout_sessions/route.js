@@ -1,0 +1,32 @@
+import { stripe } from "@/lib/stripe";
+import { NextResponse } from "next/server";
+
+export async function POST(request) {
+  try {
+    const { taskId, proposalId, taskTitle, budget } = await request.json();
+    const origin = process.env.BETTER_AUTH_URL;
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: taskTitle,
+              description: `SkillSwap payment for: ${taskTitle}`,
+            },
+            unit_amount: Math.round(budget * 100),
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      metadata: { taskId, proposalId },
+      success_url: `${origin}/payment/success?session_id={CHECKOUT_SESSION_ID}&proposalId=${proposalId}&taskId=${taskId}`,
+      cancel_url: `${origin}/dashboard/client/proposals`,
+    });
+
+    return NextResponse.json({ url: session.url });
+  } catch (err) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}

@@ -3,6 +3,7 @@
 import { serverMutation } from "../core/server"
 
 export const createClientProfile = async(newClientData)=>{
-  await serverMutation('/api/clients',newClientData)
+  const result = await serverMutation('/api/clients',newClientData)
+  return result;
 }
 

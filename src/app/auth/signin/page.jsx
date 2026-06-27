@@ -41,11 +41,19 @@ export default function SignupPage() {
                 
                 
             });
-
+console.log("Better Auth user object:", data?.user); // 
             if (authError) {
                 setError(authError.message || "Something went wrong during signup.");
             } else {
-                setSuccess("Account created successfully! Welcome.");
+                await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/jwt`, {
+                method: "POST",
+                credentials: "include", 
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email: data.user.email,
+                    role: data.user.role,
+                }),
+            });
                 setName("");
                 setEmail("");
                 setImage("");

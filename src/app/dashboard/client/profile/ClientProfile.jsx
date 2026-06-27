@@ -17,6 +17,7 @@ import { ArrowRight, ArrowUpToLine, Envelope, Globe, Pencil, Person, Smartphone 
 import { createClientProfile } from '@/lib/actions/clients';
 import toast from 'react-hot-toast';
 import { updateClientProfile } from '@/lib/core/server';
+import { useRouter } from 'next/navigation';
 
 const textInputClass = "w-full bg-black border border-zinc-800 text-white rounded-none px-3 py-3 outline-none placeholder:text-zinc-700 focus:border-emerald-500 focus:shadow-[0_0_10px_rgba(16,185,129,0.1)] transition-all duration-150 uppercase tracking-wide text-xs";
 const textAreaClass = "w-full bg-black border border-zinc-800 text-white rounded-none p-3.5 outline-none placeholder:text-zinc-700 focus:border-emerald-500 focus:shadow-[0_0_10px_rgba(16,185,129,0.1)] transition-all duration-150 resize-none uppercase tracking-wide text-xs";
@@ -117,6 +118,8 @@ const MasterDashboardContainer = ({ profile, children }) => (
 );
 
 export default function ClientProfileForm({ client,clientProfile }) {
+
+    const router = useRouter();
 
     const [profile, setProfile] = useState(clientProfile); 
     const [isEditing, setIsEditing] = useState(false);
@@ -239,6 +242,7 @@ export default function ClientProfileForm({ client,clientProfile }) {
                 setImageUrl('');
                 setErrors({});
                 toast.success("Profile updated successfully");
+                   router.push('/dashboard/client');
             } else {
                 toast.error("Failed to update profile");
             }

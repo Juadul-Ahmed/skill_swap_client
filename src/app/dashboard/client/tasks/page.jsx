@@ -5,15 +5,36 @@ import { Pencil, TrashBin } from "@gravity-ui/icons";
 import { getLoggedInClientProfile } from "@/lib/api/clients";
 import { EditTaskModal } from "@/app/components/DashboardComponents/EditTaskModal";
 import { DeleteTaskDialog } from "@/app/components/DashboardComponents/DeleteTaskDialog";
+import Link from "next/link";
 
 const ClientTasks = async () => {
-  const task = await getLoggedInClientProfile()
-   console.log("Client Profile:", task);           // ← check this
-    console.log("ClientId being used:", task?.clientId);
-  const tasks = await getClientTasks(task.clientId);
-  console.log(tasks);
+  const task = await getLoggedInClientProfile();
 
-  // Helper to determine status chip coloring based on your payload values
+  if (!task) {
+    return (
+      <div className="bg-black border border-zinc-800 rounded-2xl p-12 flex flex-col items-center justify-center text-center min-h-[400px]">
+        <div className="text-emerald-500 text-xs font-mono uppercase tracking-widest mb-3">
+          // PROFILE_REQUIRED
+        </div>
+        <h2 className="text-white text-lg font-semibold mb-2">
+          Set up your profile to manage tasks
+        </h2>
+        <p className="text-zinc-500 text-sm max-w-md mb-6">
+          Your client profile hasn't been created yet. Set it up to start posting and tracking tasks.
+        </p>
+        
+         <Link
+          href="/dashboard/client/profile"
+          className="inline-flex items-center gap-2 bg-emerald-500 text-black font-medium text-sm px-5 py-2.5 rounded-lg hover:bg-emerald-400 transition-colors"
+        >
+          Set up profile <span aria-hidden="true">→</span>
+        </Link>
+      </div>
+    );
+  }
+
+  const tasks = await getClientTasks(task.clientId);
+
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
       case "open":
@@ -33,18 +54,15 @@ const ClientTasks = async () => {
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 relative z-10">
         <div className="flex flex-col gap-2">
-          {/* Dynamic Network Status Badge */}
           <div className="inline-flex items-center gap-1.5 self-start px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[9px] font-black text-emerald-400 uppercase tracking-widest">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
             Task Pipeline Active
           </div>
 
-          {/* Main Heading with a sleek metallic gradient */}
           <h2 className="text-2xl md:text-3xl font-black tracking-tight bg-gradient-to-r from-white via-zinc-200 to-zinc-500 bg-clip-text text-transparent uppercase">
             Manage All Tasks
           </h2>
 
-          {/* Subtitle */}
           <p className="text-xs md:text-sm text-zinc-400 font-medium max-w-xl">
             Monitor your live task postings, tracking runtime specifications,
             active deployments, and candidate pipelines.
@@ -65,8 +83,7 @@ const ClientTasks = async () => {
               Open
             </div>
             <div className="text-lg font-black text-emerald-400">
-              {tasks?.filter((t) => t.status?.toLowerCase() === "open")
-                .length || 0}
+              {tasks?.filter((t) => t.status?.toLowerCase() === "open").length || 0}
             </div>
           </div>
         </div>
@@ -76,12 +93,7 @@ const ClientTasks = async () => {
         <Table.ResizableContainer>
           <Table.Content className="min-w-[800px]">
             <Table.Header>
-              <Table.Column
-                isRowHeader
-                defaultWidth="2fr"
-                id="taskTitle"
-                minWidth={200}
-              >
+              <Table.Column isRowHeader defaultWidth="2fr" id="taskTitle" minWidth={200}>
                 Task Title
                 <Table.ColumnResizer />
               </Table.Column>
@@ -110,48 +122,36 @@ const ClientTasks = async () => {
               {tasks &&
                 tasks.map((task) => (
                   <Table.Row key={task._id?.$oid || task._id}>
-                    {/* Task Title */}
                     <Table.Cell>
                       <div className="font-medium text-zinc-100">
                         {task.taskTitle || "Untitled Task"}
                       </div>
                     </Table.Cell>
 
-                    {/* Category */}
                     <Table.Cell>
                       <span className="text-sm capitalize font-medium text-zinc-300">
-                        {task.category
-                          ? task.category.replace("-", " ")
-                          : "Unassigned"}
+                        {task.category ? task.category.replace("-", " ") : "Unassigned"}
                       </span>
                     </Table.Cell>
 
-                    {/* Budget */}
                     <Table.Cell>
                       <span className="text-sm font-semibold text-emerald-400">
-                        {task.budget
-                          ? `$${task.budget.toLocaleString()}`
-                          : "$0"}
+                        {task.budget ? `$${task.budget.toLocaleString()}` : "$0"}
                       </span>
                     </Table.Cell>
 
-                    {/* Deadline */}
                     <Table.Cell>
                       <span className="text-sm text-zinc-400">
                         {task.deadline
-                          ? new Date(task.deadline).toLocaleDateString(
-                              undefined,
-                              {
-                                year: "numeric",
-                                month: "short",
-                                day: "numeric",
-                              },
-                            )
+                          ? new Date(task.deadline).toLocaleDateString(undefined, {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                            })
                           : "No Date"}
                       </span>
                     </Table.Cell>
 
-                    {/* Status */}
                     <Table.Cell>
                       <Chip
                         color={getStatusColor(task.status)}
@@ -163,17 +163,12 @@ const ClientTasks = async () => {
                       </Chip>
                     </Table.Cell>
 
-                    {/* Actions */}
                     <Table.Cell>
                       <div className="relative flex items-center gap-2">
-                        
                         <Tooltip content="Edit Job">
-                          
                           <EditTaskModal task={task} />
                         </Tooltip>
-
                         <Tooltip content="Delete Job">
-                          
                           <DeleteTaskDialog task={task} />
                         </Tooltip>
                       </div>

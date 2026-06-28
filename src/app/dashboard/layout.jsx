@@ -1,6 +1,6 @@
 import React from 'react';
 import { DashboardSideBar } from '../components/DashboardComponents/DashboardSidebar';
-
+export const dynamic = 'force-dynamic';
 const DashboardLayout = ({children}) => {
   return (
     <div className='flex min-h-screen'>

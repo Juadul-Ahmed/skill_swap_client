@@ -1,22 +1,30 @@
 "use client";
 
 import { useState } from "react";
-
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { useSession } from "@/lib/auth-client";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export default function DeleteTaskButton({ taskId }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const { data: session } = useSession();
 
   const handleDelete = async () => {
     if (!confirm("Delete this task? This cannot be undone.")) return;
     setLoading(true);
-  
+
+    try {
+      const token = session?.session?.token;
+      //  console.log("token:", token);
+
       const res = await fetch(`${baseUrl}/api/admin/tasks/${taskId}`, {
         method: "DELETE",
+        headers: {
+          ...(token ? { authorization: `Bearer ${token}` } : {}),
+        },
       });
       const data = await res.json();
       if (data?.deletedCount > 0) {
@@ -25,7 +33,11 @@ export default function DeleteTaskButton({ taskId }) {
       } else {
         toast.error(data?.error || "Failed to delete task");
       }
-    
+    } catch {
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

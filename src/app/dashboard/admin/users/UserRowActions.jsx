@@ -3,25 +3,26 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-
-const roleColors = {
-    client: { bg: "bg-blue-500/10", border: "border-blue-500/20", text: "text-blue-400" },
-    freelancer: { bg: "bg-emerald-500/10", border: "border-emerald-500/20", text: "text-emerald-400" },
-    admin: { bg: "bg-violet-500/10", border: "border-violet-500/20", text: "text-violet-400" },
-};
+import { useSession } from "@/lib/auth-client";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export default function UserRowActions({ userId, isBanned }) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const { data: session } = useSession();
 
     const handleToggle = async () => {
         setLoading(true);
         try {
+            const token = session?.session?.token;
+
             const res = await fetch(`${baseUrl}/api/admin/users/${userId}/block`, {
                 method: "PATCH",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    ...(token ? { authorization: `Bearer ${token}` } : {}),
+                },
                 body: JSON.stringify({ banned: !isBanned }),
             });
             const data = await res.json();

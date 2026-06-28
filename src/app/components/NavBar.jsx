@@ -14,6 +14,7 @@ export default function Navbar() {
 
   const handleSignOut = async () => {
     await authClient.signOut();
+    window.location.reload()
   };
 
   const publicLinks = [

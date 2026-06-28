@@ -1,21 +1,29 @@
 import { stripe } from '@/lib/stripe';
-
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { acceptProposal } from '@/lib/actions/proposals';
+
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 const PaymentSuccessPage = async ({ searchParams }) => {
-    const { session_id, proposalId, taskId } = await searchParams;
+    const { session_id, proposalId, taskId, token } = await searchParams;
 
     if (!session_id) redirect('/dashboard/client/proposals');
 
-    // Verify payment actually succeeded
+    
     const session = await stripe.checkout.sessions.retrieve(session_id);
 
     if (session.status === 'open') redirect('/');
 
     if (session.status === 'complete') {
-        await acceptProposal(proposalId);
+        const res = await fetch(`${baseUrl}/api/proposals/${proposalId}/accept`, {
+            method: "PATCH",
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token ? { authorization: `Bearer ${token}` } : {}),
+            },
+        });
+        const result = await res.json();
+        console.log("accept result:", result);
     }
 
     return (

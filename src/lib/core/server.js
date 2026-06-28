@@ -33,6 +33,10 @@ export const serverFetch = async (path) => {
   return JSON.parse(text);
 }
 
+
+  
+
+
 export const updateClientProfile = async (clientId, data) => {
   const res = await fetch(`${baseUrl}/api/profile/clients/${clientId}`, {
     method: "PATCH",

@@ -1,8 +1,7 @@
 'use server'
 
-import { serverFetch } from "../core/server";
+import { serverFetch, authHeader } from "../core/server";
 import { getUserSession } from "../core/session";
-
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
@@ -18,7 +17,10 @@ export const getLoggedInFreelancerProfile = async () => {
 export const createFreelancerProfile = async (newFreelancerData) => {
     const res = await fetch(`${baseUrl}/api/freelancers`, {
         method: "POST",
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            ...await authHeader(),
+        },
         body: JSON.stringify(newFreelancerData)
     });
     return res.json();
@@ -27,7 +29,10 @@ export const createFreelancerProfile = async (newFreelancerData) => {
 export const updateFreelancerProfile = async (freelancerId, data) => {
     const res = await fetch(`${baseUrl}/api/profile/freelancers/${freelancerId}`, {
         method: "PATCH",
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            ...await authHeader(),
+        },
         body: JSON.stringify(data)
     });
     return res.json();

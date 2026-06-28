@@ -1,10 +1,16 @@
 'use server'
+
+import { authHeader } from "../core/server"
+
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
 export const createProposal = async (data) => {
     const res = await fetch(`${baseUrl}/api/proposals`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            ...await authHeader(),
+        },
         body: JSON.stringify(data)
     });
     return res.json();
@@ -13,7 +19,10 @@ export const createProposal = async (data) => {
 export const acceptProposal = async (id) => {
     const res = await fetch(`${baseUrl}/api/proposals/${id}/accept`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            ...await authHeader(),
+        },
     });
     return res.json();
 }
@@ -21,7 +30,10 @@ export const acceptProposal = async (id) => {
 export const rejectProposal = async (id) => {
     const res = await fetch(`${baseUrl}/api/proposals/${id}/reject`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            ...await authHeader(),
+        },
     });
     return res.json();
 }

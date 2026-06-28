@@ -8,19 +8,14 @@ export const getClientTasks = async (clientId, status = "open") => {
   return res.json();
 };
 
-export const getPublicTasks = async (
-  category = "",
-  search = ""
-) => {
+export const getPublicTasks = async (category = "", search = "", page = 1) => {
   const params = new URLSearchParams();
-
   if (category) params.set("category", category);
   if (search) params.set("search", search);
+  params.set("page", page);
+  params.set("limit", 9);
 
-  const res = await fetch(
-    `${baseUrl}/api/tasks/public?${params.toString()}`
-  );
-
+  const res = await fetch(`${baseUrl}/api/tasks/public?${params.toString()}`);
   return res.json();
 };
 

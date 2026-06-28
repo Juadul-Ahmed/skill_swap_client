@@ -1,9 +1,17 @@
 import React from 'react';
 import PostTaskForm from './PostTaskForm';
 import { getLoggedInClientProfile } from '@/lib/api/clients';
+import { getUserSession } from '@/lib/core/session';
+import { redirect } from 'next/navigation';
 import Link from 'next/link';
 
 const PostTaskPage = async () => {
+  const user = await getUserSession();
+
+  if (user?.role === 'freelancer') {
+    redirect('/unauthorized');
+  }
+
   const client = await getLoggedInClientProfile();
 
   if (!client) {

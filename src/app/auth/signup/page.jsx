@@ -24,6 +24,7 @@ import {
   ShieldKeyhole,
 } from "@gravity-ui/icons";
 import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
   // Form fields
@@ -38,6 +39,7 @@ export default function SignupPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const router = useRouter();
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -55,18 +57,24 @@ export default function SignupPage() {
         role,
         image: image || undefined,
         callbackURL: "/",
-        
       });
 
       if (authError) {
         setError(authError.message || "Something went wrong during signup.");
       } else {
-        setSuccess("Account created successfully! Welcome.");
         setName("");
         setEmail("");
         setImage("");
         setPassword("");
-        setRole("client");
+        setRole("freelancer");
+
+        if (role === "freelancer") {
+          router.push("/dashboard/freelancer/profile");
+        } else if (role === "client") {
+          router.push("/dashboard/client/profile");
+        } else {
+          router.push("/dashboard/admin");
+        }
       }
     } catch (err) {
       setError("An unexpected network error occurred.");
@@ -255,39 +263,38 @@ export default function SignupPage() {
 
               {/* Account Role Selection Block */}
               <div className="flex flex-col gap-2 border border-zinc-800 rounded-xl p-4 bg-zinc-900/40">
-            <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-2 text-zinc-300">
-                  <Persons className="text-zinc-400" size={16} />
-                  <span className="text-sm font-medium">
-                    Select Marketplace Role
-                  </span>
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center gap-2 text-zinc-300">
+                    <Persons className="text-zinc-400" size={16} />
+                    <span className="text-sm font-medium">
+                      Select Marketplace Role
+                    </span>
+                  </div>
+                  <RadioGroup
+                    defaultValue="freelancer"
+                    name="role"
+                    orientation="horizontal"
+                    onChange={(value) => setRole(value)}
+                  >
+                    <Radio value="freelancer">
+                      <Radio.Content>
+                        <Radio.Control>
+                          <Radio.Indicator />
+                        </Radio.Control>
+                        Freelancer
+                      </Radio.Content>
+                    </Radio>
+                    <Radio value="client">
+                      <Radio.Content>
+                        <Radio.Control>
+                          <Radio.Indicator />
+                        </Radio.Control>
+                        Client
+                      </Radio.Content>
+                    </Radio>
+                  </RadioGroup>
                 </div>
-                <RadioGroup
-                  defaultValue="freelancer"
-                  name="role"
-                  orientation="horizontal"
-                  onChange={value => setRole(value)}
-                >
-                  <Radio value="freelancer">
-                    <Radio.Content>
-                      <Radio.Control>
-                        <Radio.Indicator />
-                      </Radio.Control>
-                      Freelancer
-                    </Radio.Content>
-                  </Radio>
-                  <Radio value="client">
-                    <Radio.Content>
-                      <Radio.Control>
-                        <Radio.Indicator />
-                      </Radio.Control>
-                      Client
-                    </Radio.Content>
-                  </Radio>
-                </RadioGroup>
               </div>
-              </div>
-              
 
               {/* Dynamic Status Badges */}
               {error && (
